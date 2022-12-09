@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBoard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/dashboard.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="navbar">
+            <div class="profile">
+                <div id="profilePic">
+                   <img src="<%= user.profilePic %>" height="50px" width="50px" alt="profile-pic" srcset="">
+                </div>
+                <div id="userName">
+                   <a href="/dashboard"><%= user.fullName %></a>  
+                </div>
+                <div id="fromId" style="display: none;"><%= user.googleId %> </div>
+            </div>
+            <div class="navs">
+                <a href="/findFriends"><div class="link">Find Friends</div></a>
+                <a href="/global"><div class="link">Global Chat</div></a>
+                <!-- <div class="link">Rate Us</div> -->
+                <a href="/logout"><div class="link">Logout</div></a>
+            </div>
+        </div>
+        <div class="previousChats">
+            <% if(Chats.length===0){ %>
+                <div id="no-chats">
+                    You Don't Have Any Previous Chats !!! <hr>
+                    Find Friends And Start Chatting ... 
+                </div>
+            <% } %> 
+            <% for (var i=0;i<Chats.length;i++){ %>
+                <div class="user">
+                    <div id="toId" style="font-size: 0px;" class="users"><%= Chats[i].googleId  %> </div>
+                    <div id="user-pic">
+                        <img src="<%= Chats[i].profilePic %> " height="40px" width="40px" alt="<%= Chats[i].fullName[0] %> " srcset="">
+                    </div>
+                    <div id="user-name"><%= Chats[i].fullName %></div>
+                    <div id="isActive" class="<%= Chats[i].activeStatus?"active":"inactive" %>">
+                    </div>
+                </div>
+            <% } %>   
+        </div>
+        <div class="personal-chat">
+            <div id="sendTo"></div>
+            <div class="messages-card">
+                <ul id="personalMessages"></ul>
+            </div>
+            <div class="send-wrapper">
+                <form action="" id="form">
+                <input type="text" id="input" required autocomplete="off" />
+                <button id="send">Send</button>
+            </form>
+            </div>
+            
+        </div>
+    </div>
+    <%- include('partials/footer') %> 
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        let fromId;
+        let toId;
+        var value=null;
+        
+        fromId=document.getElementById("fromId").textContent;
+        fromId=fromId.substr(0,21);
+
+
+        
+        let users=document.getElementsByClassName("user");
+        for(var i=0;i<users.length;i++){
+            let user=users[i];
+            var k=i;
+            users[i].addEventListener("click",(e)=>handleClick(user));
+        }
+        function handleClick(user){
+            let text=user.innerText;
+            // console.log(user.innerText.substr(22));
+            let toUser=user.innerText.substr(22);
+            let sendTo=document.getElementById('sendTo');
+            sendTo.innerHTML=toUser;
+            value="-100001-";
+            toId=text.substr(0,21);
+                let message={
+                    fromId,
+                    toId,
+                    username,
+                    value
+                }
+            socket.emit('private-chat', message);
+            let previousChats=document.getElementsByClassName("previousChats")[0];
+            previousChats.style.display="none";
+            
+            let personalChat=document.getElementsByClassName("personal-chat")[0];
+            personalChat.style.display="flex";
+        }
+        var personalMessages= document.getElementById("personalMessages");
+            
+        var form = document.getElementById("form");
+            
+        var input = document.getElementById("input");
+
+        let username=document.getElementById('userName').textContent;
+        username=username.trim();
+        form.addEventListener("submit", function (e) {
+             e.preventDefault();
+	        if (input.value) {
+                value=input.value;
+                let message={
+                    fromId,
+                    toId,
+                    username,
+                    value
+                }
+                socket.emit('chat-message',message);
+                input.value = "";
+	        }
+        });
+        
+        socket.on("chat-message", function (msg) {
+            var item = document.createElement("li");
+	        if(msg.value==null){
+                console.log("connected");
+            }
+            else if (msg.fromId === fromId) {
+                item.textContent ="You : "+msg.value;
+	            item.classList.add("sent");
+	            input.value = "";
+	        }
+	        else {
+                item.textContent =msg.username+" : "+msg.value;
+	            item.classList.add("received");
+            }
+            personalMessages.appendChild(item);
+            let messagesCard = document.getElementsByClassName("messages-card")[0];
+				messagesCard.scrollIntoView({behavior:"smooth"});
+				messagesCard.scrollTo(0,messagesCard.scrollHeight);
+        });
+    </script>
+</body>
+</html>

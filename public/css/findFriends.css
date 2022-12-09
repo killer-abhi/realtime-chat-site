@@ -1,0 +1,219 @@
+body{
+    background-color: #D6E4E5;
+}
+
+@media (min-width:500px) {
+    .friends{
+        width: 50rem;
+        margin: 0rem auto;
+    }
+    .navbar{
+        display: flex;
+        width: 80%;
+        height: 4rem;
+        margin: 2rem auto;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #B9E0FF;
+        border-radius: 1rem;
+    }
+    .profile{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 40%;
+    }
+    #profilePic{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #profilePic img{
+        border-radius: 50%;
+    }
+    #userName{
+        color: #624F82;
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    #userName:hover{
+        cursor: pointer;
+        color: black;
+    }
+    .navs{
+        width: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .link{
+        margin-left: 2rem;
+        font-size: 1.3rem;
+        color: #0D4C92;
+    }
+    .link:hover{
+        color: black;
+        cursor: pointer;
+    }
+    .card{
+        width: 80%;
+        height: 30rem;
+        background-color:#A0E4CB ;
+        margin: 2rem auto;
+        border-radius: 2rem;
+        overflow:auto;
+    }
+    .users{
+        background-color: #CFF5E7;
+        border-radius: 1rem;
+        width: 80%;
+        height: 4rem;
+        margin: 1rem auto;
+        display: flex;
+        align-items: center;
+    }
+    .users:hover{
+        cursor: pointer;
+    }
+    .users #user-pic{
+        margin-left: 2rem;
+    }
+    .users #user-pic img{
+        border-radius: 50%;
+    }
+    .users #user-name{
+        color: rgb(20, 20, 58);
+        margin-left: 4rem;
+        font-size: 1.5rem;
+    }
+    #friend-req{
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+    .add-friend{
+        height: 2.5rem;
+        width: 7rem;
+        border: 2px solid white;
+        border-radius: 0.5rem;
+        color: white;
+        background-color: rgb(34, 95, 236);
+        /* background-color: transparent; */
+    }
+    .add-friend:hover{
+        cursor: pointer;
+    }
+    
+}
+@media (min-width:200px) and (max-width:500px) {
+    .friends{
+        width: 100vw;
+    }
+    .navbar{
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        height: 7rem;
+        margin: 2rem auto;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: #B9E0FF;
+        border-radius: 1rem;
+    }
+    .profile{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 90%;
+        margin: 0rem auto;
+        /* background-color: #0D4C92; */
+    }
+    
+    #userName{
+        color: #624F82;
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    
+    .navs{
+        width: 100%;
+        display: flex;
+        /* flex-direction: column; */
+        align-items: center;
+        justify-content: space-between;
+    }
+    .link{
+        margin-left: 1rem;
+        font-size: 1rem;
+        color: #0D4C92;
+        text-decoration: none;
+    }
+
+    .card{
+        width: 90%;
+        height: 25rem;
+        background-color:#A0E4CB ;
+        margin: 2rem auto;
+        border-radius: 1rem;
+        overflow:auto;
+    }
+
+    .users{
+        background-color: #CFF5E7;
+        border-radius: 1rem;
+        width: 90%;
+        height: 4rem;
+        margin: 1rem auto;
+        display: flex;
+        align-items: center;
+    }
+    .users:hover{
+        cursor: pointer;
+    }
+    .users #user-pic{
+        margin-left: 1rem;
+    }
+    .users #user-pic img{
+        border-radius: 50%;
+    }
+    .users #user-name{
+        color: rgb(20, 20, 58);
+        width: 10rem;
+        margin-left: 1rem;
+    
+        font-size: 1.2rem;
+    }
+    #friend-req{
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+    .add-friend{
+        height: 2.5rem;
+        width: 5rem;
+        border: 2px solid white;
+        border-radius: 0.5rem;
+        color: white;
+        background-color: rgb(34, 95, 236);
+        /* background-color: transparent; */
+    }
+    .add-friend:hover{
+        cursor: pointer;
+    }
+    
+}
+
+#profilePic{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#profilePic img{
+    border-radius: 50%;
+}
+.active{
+    background-color: rgb(84, 225, 8);
+}
+.inactive{
+    background-color: red;
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Global Chat</title>
+		<link rel="stylesheet" href="/css/global.css" />
+	</head>
+	<body>
+		<div class="global">
+			<div class="navbar">
+				<div class="profile">
+					<div id="googleId" style="display: none"><%= user.googleId %></div>
+					<div id="profilePic">
+						<img
+							src="<%= user.profilePic %>"
+							height="50px"
+							width="50px"
+							alt="profile-pic"
+							srcset=""
+						/>
+					</div>
+					<div id="userName">
+						<a href="/dashboard"><%= user.fullName %></a>
+					</div>
+				</div>
+				<div class="navs">
+					<a href="/findFriends"><div class="link">Find Friends</div></a>
+					<a href="/global"><div class="link">Global Chat</div></a>
+					<!-- <div class="link">Rate Us</div> -->
+					<a href="/logout"><div class="link">Logout</div></a>
+				</div>
+			</div>
+			<div class="global-chat">
+				<div class="messages-card">
+					<ul id="messages"></ul>
+				</div>
+				<div id="typing"></div>
+				<div class="send-wrapper">
+					<form action="" id="form">
+						<input type="text" id="input" required autocomplete="off" />
+						<button id="send">Send</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<%- include('partials/footer') %>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+			var messages = document.getElementById("messages");
+			var form = document.getElementById("form");
+			var input = document.getElementById("input");
+
+			let fromId = document.getElementById("googleId").textContent;
+			fromId = fromId.substr(0, 21);
+			let username = document.getElementById("userName").textContent;
+			username = username.trim();
+
+			var roomId = "global";
+			var value = "-100001-";
+			let message = {
+				fromId,
+				roomId,
+				username,
+				value,
+			};
+			socket.emit("global-chat", message);
+
+			let typing = false;
+			let timeout = undefined;
+			let typingDiv = document.getElementById("typing");
+			function timeOutFunction() {
+				typing = false;
+				let data = {
+					username: "",
+					typing: false,
+				};
+				socket.emit("typing", data);
+			}
+			input.addEventListener("keydown", (e) => {
+				if (e.keyCode!= 13) {
+					typing = true;
+					let data = {
+						username: username,
+						typing: true,
+					};
+					socket.emit("typing", data);
+					timeout = setTimeout(timeOutFunction, 5000);
+					// clearTimeout(timeout);
+				} else {
+					clearTimeout(timeout);
+					timeout = setTimeout(timeOutFunction, 500);
+				}
+			});
+			socket.on("displayTyping", (data) => {
+				if (data.username !== username && data.username !== "") {
+					if (data.type == "join") {
+						typingDiv.innerHTML = data.username + " joined chat";
+					} else {
+						typingDiv.innerHTML = data.username + " is typing";
+					}
+				} else {
+					typingDiv.innerHTML = "";
+				}
+			});
+
+			form.addEventListener("submit", function (e) {
+				e.preventDefault();
+				if (input.value) {
+					value = input.value;
+					let message = {
+						fromId,
+						username,
+						value,
+						roomId,
+					};
+					socket.emit("global-message", message);
+					input.value = "";
+				}
+			});
+
+			socket.on("global-message", function (msg) {
+				var item = document.createElement("li");
+				if (msg.fromId === fromId) {
+					item.textContent = "You : "+ msg.value;
+					item.classList.add("sent");
+					input.value = "";
+				} else {
+					item.textContent = msg.username + " : " + msg.value;
+					item.classList.add("received");
+				}
+				messages.appendChild(item);
+				let messagesCard = document.getElementsByClassName("messages-card")[0];
+				messagesCard.scrollIntoView({behavior:"smooth"});
+				messagesCard.scrollTo(0,messagesCard.scrollHeight);
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+    <link rel="stylesheet" href="/css/findFriends.css">
+</head>
+<body>
+    <div class="friends">
+        <div class="navbar">
+            <div class="profile">
+                <div id="profilePic">
+                   <img src="<%= user.profilePic %>" height="50px" width="50px" alt="profile-pic" srcset="">
+                </div>
+                <div id="userName">
+                    <a href="/dashboard"><%= user.fullName %></a>  
+                </div>
+            </div>
+            <div class="navs">
+                <a href="/findFriends"><div class="link">Find Friends</div></a>
+                <a href="/global"><div class="link">Global Chat</div></a>
+                <!-- <div class="link">Rate Us</div> -->
+                <a href="/logout"><div class="link">Logout</div></a>
+            </div>
+        </div>
+        <div class="card">
+            <% for (var i=0;i<Users.length;i++){ %>
+                <div class="users">
+                    <div style="display: none;"><%= i %> </div>
+                    <div id="user-pic">
+                        <img src="<%= Users[i].profilePic %> " height="40px" width="40px" alt="<%= Users[i].fullName[0] %> " srcset="">
+                    </div>
+                    <div id="user-name"><%= Users[i].fullName %></div>
+                    <a id="friend-req" href="/addFriend/<%= Users[i].googleId %>">
+                        <button id="btn1" class="add-friend">Add Friend</button>
+                    </a>
+                </div>
+            <% } %>   
+        </div>
+    </div>
+    <%- include('partials/footer') %> 
+
+</body>
+</html>
