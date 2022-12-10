@@ -2,4 +2,4 @@
 
 Visit Site -
 
-www.chatsite.up.railway.app
+https://chatsite.up.railway.app/
